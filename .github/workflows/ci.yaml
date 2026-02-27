@@ -88,6 +88,7 @@ jobs:
     - name: Run unit tests
       run: |
         cd build
+        chmod +x bin/unit_tests
         ctest --output-on-failure --parallel $(nproc)
 
     - name: Upload test results
