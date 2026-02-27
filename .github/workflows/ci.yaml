@@ -1,4 +1,4 @@
-name: CI - Build and Test
+name: CI - Build, Test & Docker
 
 on:
   push:
@@ -6,40 +6,56 @@ on:
   pull_request:
     branches: [ main ]
 
+defaults:
+  run:
+    shell: bash
+    working-directory: ./
+
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/system-monitor
+  CACHE_KEY: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('**/*.cpp', '**/*.h') }}
 
 jobs:
+  ### BUILD & CACHE
   build:
     runs-on: ubuntu-latest
     outputs:
       build-status: ${{ job.status }}
+      cache-key: ${{ steps.cache.outputs.cache-key }}
     
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
-        sudo apt-get update
+        sudo apt-get update -qq
         sudo apt-get install -y \
-          build-essential \
-          cmake \
-          g++ \
-          make
+          build-essential cmake g++ make
+
+    - name: Cache CMake build
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          build/
+          !build/**/*.o
+          !build/**/*.tmp
+        key: ${{ env.CACHE_KEY }}
 
     - name: Configure CMake
+      if: steps.cache.outputs.cache-hit != 'true'
       run: |
         mkdir -p build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Debug
+        cmake .. -DCMAKE_BUILD_TYPE=${{ github.ref == 'refs/heads/main' && 'Release' || 'Debug' }}
 
     - name: Build
       run: |
         cd build
-        make -j$(nproc)
+        make -j$(nproc) VERBOSE=1
 
-    - name: Upload build artifacts
+    - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build-artifacts
@@ -48,55 +64,55 @@ jobs:
           !build/**/*.o
           !build/**/*.tmp
         retention-days: 1
-
+        compression-level: 6
+  ### UNIT TESTS
   test:
     needs: build
     runs-on: ubuntu-latest
-    if: success()
+    if: needs.build.outputs.build-status == 'success'
     
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Download build artifacts
+    - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
         name: build-artifacts
         path: build/
 
-    - name: Install dependencies (for tests)
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          cmake \
-          g++ \
-          make
-
-    - name: Run tests
+    - name: Run unit tests
       run: |
         cd build
         chmod +x bin/unit_tests
-        ctest --output-on-failure
+        ctest --output-on-failure --parallel $(nproc)
 
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-results
+        name: test-results-${{ github.job }}
         path: build/Testing/
         retention-days: 7
 
-  docker-build:
+  ### DOCKER BUILD & SCAN (main only)
+  docker:
     needs: [build, test]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions:
+      packages: write
+      contents: read
+
+    strategy:
+      matrix:
+        platforms: [linux/amd64, linux/arm64]
     
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Download build artifacts
+    - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
         name: build-artifacts
@@ -111,16 +127,42 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push Docker image
-      run: |
-        # Всегда пушим с SHA
-        docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
-        docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
-        
-        # Для main обновляем latest
-        docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
-        docker push ${{ env.DOCKER_IMAGE }}:latest
+    - name: Build & push multi-arch image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        platforms: ${{ matrix.platforms }}
+        push: true
+        tags: |
+          ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          ${{ env.DOCKER_IMAGE }}:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
-    - name: Test Docker image
+    - name: Run image smoke test
       run: |
-        docker run --rm ${{ env.DOCKER_IMAGE }}:${{ github.sha }} --help
+        docker run --rm --platform ${{ matrix.platforms }} \
+          ${{ env.DOCKER_IMAGE }}:${{ github.sha }} --help
+
+  ### SECURITY SCAN
+  security:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+
+    - name: Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
