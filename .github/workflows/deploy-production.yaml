@@ -32,53 +32,53 @@ jobs:
           echo "Validation passed"
           echo "valid=true" >> $GITHUB_OUTPUT
 
-  # check-ci-status:
-  #   needs: validate
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: read
-  #     checks: read
-  #     actions: read
-  #   outputs:
-  #     commit: ${{ steps.get-commit.outputs.commit }}
-  #   steps:
-  #     - name: Get latest commit from main
-  #       id: get-commit
-  #       run: |
-  #         git clone --depth 1 https://github.com/${{ github.repository }}.git temp-repo
-  #         cd temp-repo
-  #         COMMIT=$(git rev-parse origin/main)
-  #         cd .. && rm -rf temp-repo
-  #         echo "commit=$COMMIT" >> $GITHUB_OUTPUT
-  #         echo "Using latest main commit: $COMMIT"
+  check-ci-status:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: read
+      actions: read
+    outputs:
+      commit: ${{ steps.get-commit.outputs.commit }}
+    steps:
+      - name: Get latest commit from main
+        id: get-commit
+        run: |
+          git clone --depth 1 https://github.com/${{ github.repository }}.git temp-repo
+          cd temp-repo
+          COMMIT=$(git rev-parse origin/main)
+          cd .. && rm -rf temp-repo
+          echo "commit=$COMMIT" >> $GITHUB_OUTPUT
+          echo "Using latest main commit: $COMMIT"
       
-  #     - name: Check CI status for this commit
-  #       run: |
-  #         COMMIT="${{ steps.get-commit.outputs.commit }}"
-  #         echo "Checking CI status for commit: $COMMIT"
+      - name: Check CI status for this commit
+        run: |
+          COMMIT="${{ steps.get-commit.outputs.commit }}"
+          echo "Checking CI status for commit: $COMMIT"
           
-  #         # Получаем все check runs для этого коммита
-  #         WORKFLOW_RUNS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-  #           "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs")
+          # Получаем все check runs для этого коммита
+          WORKFLOW_RUNS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs")
           
-  #         # Проверяем статус каждой важной job
-  #         BUILD_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "build") | .conclusion' | head -1)
-  #         TEST_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "test") | .conclusion' | head -1)
-  #         DOCKER_BUILD_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "docker-build") | .conclusion' | head -1)
+          # Проверяем статус каждой важной job
+          BUILD_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "build") | .conclusion' | head -1)
+          TEST_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "test") | .conclusion' | head -1)
+          DOCKER_BUILD_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "docker-build") | .conclusion' | head -1)
           
-  #         echo "Build job status: $BUILD_STATUS"
-  #         echo "Test job status: $TEST_STATUS"
-  #         echo "Docker build job status: $DOCKER_BUILD_STATUS"
+          echo "Build job status: $BUILD_STATUS"
+          echo "Test job status: $TEST_STATUS"
+          echo "Docker build job status: $DOCKER_BUILD_STATUS"
           
-  #         # Проверяем что все job завершились успешно
-  #         if [[ "$BUILD_STATUS" != "success" ]] || [[ "$TEST_STATUS" != "success" ]] || [[ "$DOCKER_BUILD_STATUS" != "success" ]]; then
-  #           echo "CI tests failed!"
-  #           echo "Available check runs:"
-  #           echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | "\(.name): \(.conclusion)"'
-  #           exit 1
-  #         fi
+          # Проверяем что все job завершились успешно
+          if [[ "$BUILD_STATUS" != "success" ]] || [[ "$TEST_STATUS" != "success" ]] || [[ "$DOCKER_BUILD_STATUS" != "success" ]]; then
+            echo "CI tests failed!"
+            echo "Available check runs:"
+            echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | "\(.name): \(.conclusion)"'
+            exit 1
+          fi
           
-  #         echo "CI tests passed for commit $COMMIT"
+          echo "CI tests passed for commit $COMMIT"
 
   deploy:
     # needs: [validate, check-ci-status]
@@ -94,72 +94,7 @@ jobs:
         echo "Version: ${{ needs.check-ci-status.outputs.commit }}"
         echo "Deployed by: ${{ github.actor }}"
         echo "Time: $(date)"
-    
-    # - name: Deploy to Production VPS
-    #   uses: appleboy/ssh-action@v1.0.3
-    #   with:
-    #     host: ${{ secrets.VPS_HOST_PROD }}
-    #     username: ${{ secrets.VPS_USERNAME_PROD }}
-    #     key: ${{ secrets.VPS_SSH_KEY_PROD }}
-    #     script: |
-    #       set -e  # Exit on error
-          
-    #       echo "PRODUCTION DEPLOYMENT"
-    #       echo "Version: ${{ needs.check-ci-status.outputs.commit }}"
-          
-    #       # Создаем backup директорию
-    #       BACKUP_DIR=~/system-monitor-backups/$(date +%Y%m%d_%H%M%S)
-    #       mkdir -p $BACKUP_DIR
-          
-    #       cd ~/system-monitor || mkdir -p ~/system-monitor && cd ~/system-monitor
-          
-    #       # Backup текущей конфигурации если есть
-    #       if [ -f docker-compose.yml ]; then
-    #         cp docker-compose.yml $BACKUP_DIR/
-    #         docker-compose ps > $BACKUP_DIR/containers.txt
-    #       fi
-          
-    #       # Скачиваем актуальный docker-compose
-    #       curl -o docker-compose.yml \
-    #         https://raw.githubusercontent.com/${{ github.repository }}/main/docker-compose.yml
-          
-    #       # Логинимся в Docker Hub
-    #       echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          
-    #       # Останавливаем старый контейнер
-    #       docker-compose down || true
-          
-    #       # Обновляем образ
-    #       export TAG=${{ needs.check-ci-status.outputs.commit }}
-    #       docker-compose pull
-    #       docker-compose up -d
-          
-    #       # Расширенная проверка здоровья
-    #       echo "Waiting for service to be healthy..."
-    #       sleep 3
-          
-    #       # Проверка статуса контейнеров
-    #       if docker-compose ps | grep "Up"; then
-    #         echo "Containers are running!"
-    #         docker-compose ps
-    #       else
-    #         echo "Containers failed to start"
-    #         docker-compose logs
-    #         exit 1
-    #       fi
-          
-    #       # Очистка старых образов
-    #       docker image prune -f
-          
-    #       echo "PRODUCTION DEPLOYMENT COMPLETE!"
-          
-    #       # Сохраняем информацию о деплое
-    #       cat > $BACKUP_DIR/deploy-info.txt << EOF
-    #       Version: ${{ needs.check-ci-status.outputs.commit }}
-    #       Deployed by: ${{ github.actor }}
-    #       Date: $(date)
-    #       Workflow: ${{ github.run_id }}
-    #       EOF
+  
     - name: Deploy to Production VPS (with password)
       uses: appleboy/ssh-action@v1.0.3
       with:
