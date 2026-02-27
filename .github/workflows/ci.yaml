@@ -90,7 +90,7 @@ jobs:
   docker-build:
     needs: [build, test]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'  # Только для main
+    if: github.ref == 'refs/heads/main'
     
     steps:
     - name: Checkout repository

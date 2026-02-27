@@ -74,22 +74,24 @@ jobs:
           COMMIT="${{ steps.get-commit.outputs.commit }}"
           echo "Checking CI status for commit: $COMMIT"
           
-          # Получаем все workflow runs для этого коммита
+          # Получаем все check runs для этого коммита
           WORKFLOW_RUNS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs")
           
-          # Проверяем статус нашего workflow
-          CI_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "CI - Build and Test") | .conclusion' | head -1)
+          # Проверяем статус каждой важной job
+          BUILD_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "build") | .conclusion' | head -1)
+          TEST_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "test") | .conclusion' | head -1)
+          DOCKER_BUILD_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "docker-build") | .conclusion' | head -1)
           
-          if [[ -z "$CI_STATUS" ]]; then
-            echo "CI workflow not found for this commit!"
+          echo "Build job status: $BUILD_STATUS"
+          echo "Test job status: $TEST_STATUS"
+          echo "Docker build job status: $DOCKER_BUILD_STATUS"
+          
+          # Проверяем что все job завершились успешно
+          if [[ "$BUILD_STATUS" != "success" ]] || [[ "$TEST_STATUS" != "success" ]] || [[ "$DOCKER_BUILD_STATUS" != "success" ]]; then
+            echo "CI tests failed!"
             echo "Available check runs:"
-            echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | .name'
-            exit 1
-          fi
-          
-          if [[ "$CI_STATUS" != "success" ]]; then
-            echo "CI tests failed (status: $CI_STATUS)! Cannot deploy to production."
+            echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | "\(.name): \(.conclusion)"'
             exit 1
           fi
           
@@ -150,7 +152,7 @@ jobs:
           
           # Расширенная проверка здоровья
           echo "Waiting for service to be healthy..."
-          sleep 10
+          sleep 3
           
           # Проверка статуса контейнеров
           if docker-compose ps | grep "Up"; then
