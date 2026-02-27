@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  system-monitor:
+    build: .
+    container_name: system-monitor
+    restart: unless-stopped
+    # Для доступа к системной информации хоста
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc:/host/etc:ro
+    environment:
+      - TZ=Europe/Moscow
+    # Запускаем в непрерывном режиме с интервалом 5 секунд
+    command: ["-c", "5"]
+    # Ограничения ресурсов
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    # Логирование
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
