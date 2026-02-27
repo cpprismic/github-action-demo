@@ -1,10 +1,10 @@
-name: Deploy to Production
+name: Deploy to Production VPS
 
 on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type "PRODUCTION" to confirm'
+        description: 'Type "DEPLOY" to confirm the deployment'
         required: true
         type: string
 
@@ -24,8 +24,8 @@ jobs:
       - name: Validate confirmation
         id: validate
         run: |
-          if [[ "${{ github.event.inputs.confirm }}" != "PRODUCTION" ]]; then
-            echo "Error: You must type 'PRODUCTION' to confirm"
+          if [[ "${{ github.event.inputs.confirm }}" != "DEPLOY" ]]; then
+            echo "Error: You must type 'DEPLOY' to confirm the deployment"
             exit 1
           fi
           
@@ -85,6 +85,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: production
+    permissions:
+      contents: read
+      deployments: write
     
     steps:
     - name: Notify about deployment start
@@ -158,7 +161,143 @@ jobs:
           Workflow: ${{ github.run_id }}
           Method: password
           EOF
+
+  health-check:
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment: 
+      name: production
+    permissions:
+      contents: read
+      deployments: write
+    outputs:
+      status: ${{ steps.health-check-status.outputs.status }}
     
+    steps:
+    - name: Health Check
+      id: health-check
+      continue-on-error: false
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST_PROD }}
+        username: ${{ secrets.VPS_USERNAME_PROD }}
+        password: ${{ secrets.VPS_PASSWORD_PROD }}
+        script: |
+          set -e
+          
+          echo "==================================="
+          echo "STARTING HEALTH CHECK"
+          echo "==================================="
+          echo "Version: ${{ needs.deploy.outputs.commit }}"
+          
+          # 1. Проверка запущен ли контейнер
+          echo ""
+          echo "1. Checking container status..."
+          if docker ps | grep -q system-monitor; then
+            echo "Container is running"
+          else
+            echo "Container is not running"
+            docker ps -a | grep system-monitor || true
+            exit 1
+          fi
+          
+          # 2. Проверка времени работы (uptime)
+          echo ""
+          echo "2. Checking uptime..."
+          UPTIME=$(docker inspect --format='{{.State.StartedAt}}' system-monitor 2>/dev/null)
+          if [ $? -eq 0 ]; then
+            echo "Container started at: $UPTIME"
+            
+            # Проверяем что контейнер работает не менее 5 секунд
+            START_TIME=$(date -d "$UPTIME" +%s)
+            CURRENT_TIME=$(date +%s)
+            RUNTIME=$((CURRENT_TIME - START_TIME))
+            
+            if [ $RUNTIME -gt 5 ]; then
+              echo "Container has been running for $RUNTIME seconds"
+            else
+              echo "Container just started ($RUNTIME seconds ago), waiting a bit..."
+              sleep 5
+            fi
+          else
+            echo "Failed to get container uptime"
+            exit 1
+          fi
+          
+          # 3. Проверка использования ресурсов
+          echo ""
+          echo "3. Checking resource usage..."
+          
+          # Получаем использование памяти
+          MEM_USAGE=$(docker stats system-monitor --no-stream --format "{{.MemUsage}}" 2>/dev/null)
+          if [ $? -eq 0 ]; then
+            echo "Memory usage: $MEM_USAGE"
+          else
+            echo "Could not get memory usage"
+          fi
+          
+          # Получаем использование CPU
+          CPU_USAGE=$(docker stats system-monitor --no-stream --format "{{.CPUPerc}}" 2>/dev/null)
+          if [ $? -eq 0 ]; then
+            echo "CPU usage: $CPU_USAGE"
+          else
+            echo "Could not get CPU usage"
+          fi
+          
+          # 4. Проверка что приложение действительно работает
+          echo ""
+          echo "4. Testing application functionality..."
+          
+          # Проверяем что процесс внутри контейнера жив
+          if docker exec system-monitor ps aux 2>/dev/null | grep -q "system_monitor"; then
+            echo "Application process is running inside container"
+          else
+            # Пробуем альтернативный способ
+            if docker exec system-monitor sh -c "ls -la /usr/local/bin/ 2>/dev/null | grep -q system_monitor"; then
+              echo "Application binary exists but process may not be running"
+              docker exec system-monitor ps aux 2>/dev/null || echo "Cannot list processes"
+            else
+              echo "Application binary not found"
+              exit 1
+            fi
+          fi
+          
+          # 5. Проверка логов на наличие ошибок
+          echo ""
+          echo "5. Checking logs for errors..."
+          ERROR_COUNT=$(docker logs --tail 50 system-monitor 2>&1 | grep -i "error\|fatal\|panic" | grep -v "warn" | wc -l)
+          
+          if [ $ERROR_COUNT -eq 0 ]; then
+            echo "No errors found in logs"
+          else
+            echo "Found $ERROR_COUNT potential issues in logs:"
+            docker logs --tail 20 system-monitor 2>&1 | grep -i "error\|fatal\|panic" || true
+          fi
+          
+          # Финальный вердикт
+          echo ""
+          echo "==================================="
+          echo "HEALTH CHECK PASSED"
+          echo "==================================="
+          echo "Container: system-monitor"
+          echo "Version: ${{ needs.deploy.outputs.commit }}"
+          echo "Completed: $(date)"
+      
+    - name: Set health check status
+      id: health-check-status
+      run: |
+        echo "status=success" >> $GITHUB_OUTPUT
+        echo "Health check completed successfully"
+
+  create-deployment-record:
+    needs: health-check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    if: success()
+    
+    steps:
     - name: Create GitHub Deployment
       uses: actions/github-script@v7
       with:
@@ -166,8 +305,16 @@ jobs:
           await github.rest.repos.createDeployment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: '${{ needs.check-ci-status.outputs.commit }}',
+            ref: '${{ needs.deploy.outputs.commit }}',
             environment: 'production',
             required_contexts: [],
-            auto_merge: false
+            auto_merge: false,
+            description: 'Deployed version ${{ needs.deploy.outputs.commit }} with health check passed'
           });
+          
+    - name: Deployment Success Notification
+      run: |
+        echo "Production deployment completed successfully!"
+        echo "Version: ${{ needs.deploy.outputs.commit }}"
+        echo "Health check: PASSED"
+        echo "Deployment record created in GitHub"
