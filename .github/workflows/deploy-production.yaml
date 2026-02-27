@@ -289,61 +289,61 @@ jobs:
         echo "Health check completed successfully"
 
   create-deployment-record:
-  needs: health-check
-  runs-on: ubuntu-latest
-  permissions:
-    contents: read
-    deployments: write
-  if: success()
-  
-  steps:
-  - name: Get commit from deploy job
-    id: get-commit
-    run: |
-      # Получаем commit из предыдущей job через needs
-      COMMIT="${{ needs.deploy.outputs.commit }}"
-      
-      # Если пустой, пробуем получить из check-ci-status
-      if [ -z "$COMMIT" ]; then
-        COMMIT="${{ needs.check-ci-status.outputs.commit }}"
-      fi
-      
-      # Если все еще пустой, получаем последний коммит из main
-      if [ -z "$COMMIT" ]; then
-        git clone --depth 1 https://github.com/${{ github.repository }}.git temp-repo
-        cd temp-repo
-        COMMIT=$(git rev-parse origin/main)
-        cd .. && rm -rf temp-repo
-      fi
-      
-      echo "commit=$COMMIT" >> $GITHUB_OUTPUT
-      echo "Using commit: $COMMIT"
-  
-  - name: Create GitHub Deployment
-    uses: actions/github-script@v7
-    with:
-      script: |
-        const commit = '${{ steps.get-commit.outputs.commit }}';
+    needs: health-check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    if: success()
+    
+    steps:
+    - name: Get commit from deploy job
+      id: get-commit
+      run: |
+        # Получаем commit из предыдущей job через needs
+        COMMIT="${{ needs.deploy.outputs.commit }}"
         
-        if (!commit) {
-          throw new Error('Commit hash is empty!');
-        }
+        # Если пустой, пробуем получить из check-ci-status
+        if [ -z "$COMMIT" ]; then
+          COMMIT="${{ needs.check-ci-status.outputs.commit }}"
+        fi
         
-        console.log(`Creating deployment for commit: ${commit}`);
+        # Если все еще пустой, получаем последний коммит из main
+        if [ -z "$COMMIT" ]; then
+          git clone --depth 1 https://github.com/${{ github.repository }}.git temp-repo
+          cd temp-repo
+          COMMIT=$(git rev-parse origin/main)
+          cd .. && rm -rf temp-repo
+        fi
         
-        await github.rest.repos.createDeployment({
-          owner: context.repo.owner,
-          repo: context.repo.repo,
-          ref: commit,
-          environment: 'production',
-          required_contexts: [],
-          auto_merge: false,
-          description: `Deployed version ${commit} with health check passed`
-        });
-        
-  - name: Deployment Success Notification
-    run: |
-      echo "Production deployment completed successfully!"
-      echo "Version: ${{ steps.get-commit.outputs.commit }}"
-      echo "Health check: PASSED"
-      echo "Deployment record created in GitHub"
+        echo "commit=$COMMIT" >> $GITHUB_OUTPUT
+        echo "Using commit: $COMMIT"
+    
+    - name: Create GitHub Deployment
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const commit = '${{ steps.get-commit.outputs.commit }}';
+          
+          if (!commit) {
+            throw new Error('Commit hash is empty!');
+          }
+          
+          console.log(`Creating deployment for commit: ${commit}`);
+          
+          await github.rest.repos.createDeployment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: commit,
+            environment: 'production',
+            required_contexts: [],
+            auto_merge: false,
+            description: `Deployed version ${commit} with health check passed`
+          });
+          
+    - name: Deployment Success Notification
+      run: |
+        echo "Production deployment completed successfully!"
+        echo "Version: ${{ steps.get-commit.outputs.commit }}"
+        echo "Health check: PASSED"
+        echo "Deployment record created in GitHub"
