@@ -119,7 +119,7 @@ bool parseArguments(int argc, char* argv[], bool& continuous_mode, int& interval
         std::cout << "Options:\n";
         std::cout << "  -c, --continuous [N]  Run in continuous mode with N second interval (default: 2)\n";
         std::cout << "  -h, --help            Show this help message\n";
-        return false;
+        return true;
     }
 
     if (arg1 == "--continuous" || arg1 == "-c") {
