@@ -81,8 +81,7 @@ jobs:
           echo "CI tests passed for commit $COMMIT"
 
   deploy:
-    # needs: [validate, check-ci-status]
-    needs: [validate]
+    needs: [validate, check-ci-status]
     runs-on: ubuntu-latest
     environment: 
       name: production
@@ -95,7 +94,7 @@ jobs:
         echo "Deployed by: ${{ github.actor }}"
         echo "Time: $(date)"
   
-    - name: Deploy to Production VPS (with password)
+    - name: Deploy to Production VPS
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST_PROD }}
@@ -134,30 +133,22 @@ jobs:
           
           # Останавливаем старый контейнер
           docker-compose down || true
+
+          # export TAG=${{ steps.set-commit.outputs.commit }}
           
           # Обновляем образ
           export TAG=${{ needs.check-ci-status.outputs.commit }}
+          export DOCKER_IMAGE=${{ secrets.DOCKER_USERNAME }}/system-monitor
           echo "Pulling image with tag: $TAG"
           docker-compose pull
+
+          echo "Starting container..."
           docker-compose up -d
-          
-          # Проверка статуса контейнеров
-          echo "Waiting for service to start..."
-          sleep 5
-          
-          if docker-compose ps | grep "Up"; then
-            echo "✅ Containers are running!"
-            docker-compose ps
-          else
-            echo "❌ Containers failed to start"
-            docker-compose logs
-            exit 1
-          fi
           
           # Очистка старых образов
           docker image prune -f
           
-          echo "✅ PRODUCTION DEPLOYMENT COMPLETE!"
+          echo "PRODUCTION DEPLOYMENT COMPLETE!"
           
           # Сохраняем информацию о деплое
           cat > $BACKUP_DIR/deploy-info.txt << EOF
