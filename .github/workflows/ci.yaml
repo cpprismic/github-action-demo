@@ -87,40 +87,40 @@ jobs:
         path: build/Testing/
         retention-days: 7
 
-  docker-build:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+  # docker-build:
+  #   needs: [build, test]
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
     
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v4
 
-    - name: Download build artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: build-artifacts
-        path: build/
+  #   - name: Download build artifacts
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: build-artifacts
+  #       path: build/
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+  #   - name: Set up Docker Buildx
+  #     uses: docker/setup-buildx-action@v3
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+  #   - name: Login to Docker Hub
+  #     uses: docker/login-action@v3
+  #     with:
+  #       username: ${{ secrets.DOCKER_USERNAME }}
+  #       password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and push Docker image
-      run: |
-        # Всегда пушим с SHA
-        docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
-        docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+  #   - name: Build and push Docker image
+  #     run: |
+  #       # Всегда пушим с SHA
+  #       docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
+  #       docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
         
-        # Для main обновляем latest
-        docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
-        docker push ${{ env.DOCKER_IMAGE }}:latest
+  #       # Для main обновляем latest
+  #       docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
+  #       docker push ${{ env.DOCKER_IMAGE }}:latest
 
-    - name: Test Docker image
-      run: |
-        docker run --rm ${{ env.DOCKER_IMAGE }}:${{ github.sha }} --help
+  #   - name: Test Docker image
+  #     run: |
+  #       docker run --rm ${{ env.DOCKER_IMAGE }}:${{ github.sha }} --help
