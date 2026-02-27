@@ -13,7 +13,6 @@ defaults:
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/system-monitor
-  CACHE_KEY: cmake-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('**/*.cpp', '**/*.h') }}
 
 jobs:
   # BUILD & CACHE
@@ -26,6 +25,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Generate cache key
+      id: cache-key
+      run: |
+        echo "key=${RUNNER_OS}-cmake-$(sha256sum CMakeLists.txt | cut -d' ' -f1)" >> $GITHUB_OUTPUT
 
     - name: Install dependencies
       run: |
@@ -41,7 +45,7 @@ jobs:
           build/
           !build/**/*.o
           !build/**/*.tmp
-        key: ${{ env.CACHE_KEY }}
+        key: ${{ steps.cache-key.outputs.key }}
 
     - name: Configure CMake
       if: steps.cache.outputs.cache-hit != 'true'
