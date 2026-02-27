@@ -1,4 +1,4 @@
-name: CI - Build, Test & Docker
+name: Build, Test & Docker
 
 on:
   push:
@@ -16,7 +16,7 @@ env:
   CACHE_KEY: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('**/*.cpp', '**/*.h') }}
 
 jobs:
-  ### BUILD & CACHE
+  # BUILD & CACHE
   build:
     runs-on: ubuntu-latest
     outputs:
@@ -65,7 +65,7 @@ jobs:
           !build/**/*.tmp
         retention-days: 1
         compression-level: 6
-  ### UNIT TESTS
+  # UNIT TESTS
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -84,7 +84,6 @@ jobs:
     - name: Run unit tests
       run: |
         cd build
-        chmod +x bin/unit_tests
         ctest --output-on-failure --parallel $(nproc)
 
     - name: Upload test results
@@ -95,11 +94,11 @@ jobs:
         path: build/Testing/
         retention-days: 7
 
-  ### DOCKER BUILD & SCAN (main only)
+  # DOCKER BUILD
   docker:
+    if: github.ref == 'refs/heads/main'
     needs: [build, test]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     permissions:
       packages: write
       contents: read
@@ -144,7 +143,7 @@ jobs:
         docker run --rm --platform ${{ matrix.platforms }} \
           ${{ env.DOCKER_IMAGE }}:${{ github.sha }} --help
 
-  ### SECURITY SCAN
+  # SECURITY SCAN
   security:
     needs: [build, test]
     runs-on: ubuntu-latest
