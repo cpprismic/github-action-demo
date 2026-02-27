@@ -52,19 +52,44 @@ jobs:
           echo "commit=$COMMIT" >> $GITHUB_OUTPUT
           echo "Using latest main commit: $COMMIT"
       
+      # - name: Check CI status for this commit
+      #   run: |
+      #     COMMIT="${{ steps.get-commit.outputs.commit }}"
+      #     echo "Checking CI status for commit: $COMMIT"
+          
+      #     # Проверяем статус CI
+      #     CI_STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+      #       "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs" \
+      #       | jq -r '.check_runs[] | select(.name | contains("CI - Build and Test")) | .conclusion' \
+      #       | head -1)
+          
+      #     if [[ "$CI_STATUS" != "success" ]]; then
+      #       echo "CI tests failed or not found! Cannot deploy to production."
+      #       exit 1
+      #     fi
+          
+      #     echo "CI tests passed for commit $COMMIT"
       - name: Check CI status for this commit
         run: |
           COMMIT="${{ steps.get-commit.outputs.commit }}"
           echo "Checking CI status for commit: $COMMIT"
           
-          # Проверяем статус CI
-          CI_STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs" \
-            | jq -r '.check_runs[] | select(.name | contains("CI - Build and Test")) | .conclusion' \
-            | head -1)
+          # Получаем все workflow runs для этого коммита
+          WORKFLOW_RUNS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs")
+          
+          # Проверяем статус нашего workflow
+          CI_STATUS=$(echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | select(.name == "CI - Build and Test") | .conclusion' | head -1)
+          
+          if [[ -z "$CI_STATUS" ]]; then
+            echo "CI workflow not found for this commit!"
+            echo "Available check runs:"
+            echo "$WORKFLOW_RUNS" | jq -r '.check_runs[] | .name'
+            exit 1
+          fi
           
           if [[ "$CI_STATUS" != "success" ]]; then
-            echo "CI tests failed or not found! Cannot deploy to production."
+            echo "CI tests failed (status: $CI_STATUS)! Cannot deploy to production."
             exit 1
           fi
           
