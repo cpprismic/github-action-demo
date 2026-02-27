@@ -3,10 +3,6 @@ name: Deploy to Production
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to deploy (commit SHA)'
-        required: true
-        type: string
       confirm:
         description: 'Type "PRODUCTION" to confirm'
         required: true
@@ -33,41 +29,38 @@ jobs:
             exit 1
           fi
           
-          # Проверяем формат SHA (опционально)
-          if [[ ! "${{ github.event.inputs.version }}" =~ ^[a-f0-9]{40}$ && "${{ github.event.inputs.version }}" != "latest" ]]; then
-            echo "Error: Version must be a valid commit SHA (40 chars) or 'latest'"
-            exit 1
-          fi
-          
           echo "Validation passed"
           echo "valid=true" >> $GITHUB_OUTPUT
 
   check-ci-status:
     needs: validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: read
+      actions: read
     outputs:
-      commit: ${{ steps.check.outputs.commit }}
+      commit: ${{ steps.get-commit.outputs.commit }}
     steps:
-      - name: Check CI status for this commit
-        id: check
+      - name: Get latest commit from main
+        id: get-commit
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          
-          # Если latest, получаем последний коммит из main
-          if [[ "$VERSION" == "latest" ]]; then
-            git clone --depth 50 https://github.com/${{ github.repository }}.git temp-repo
-            cd temp-repo
-            VERSION=$(git rev-parse origin/main)
-            cd .. && rm -rf temp-repo
-            echo "Using latest main commit: $VERSION"
-          fi
-          
-          echo "Checking CI status for commit: $VERSION"
+          git clone --depth 1 https://github.com/${{ github.repository }}.git temp-repo
+          cd temp-repo
+          COMMIT=$(git rev-parse origin/main)
+          cd .. && rm -rf temp-repo
+          echo "commit=$COMMIT" >> $GITHUB_OUTPUT
+          echo "Using latest main commit: $COMMIT"
+      
+      - name: Check CI status for this commit
+        run: |
+          COMMIT="${{ steps.get-commit.outputs.commit }}"
+          echo "Checking CI status for commit: $COMMIT"
           
           # Проверяем статус CI
           CI_STATUS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/commits/$VERSION/check-runs" \
-            | jq -r '.check_runs[] | select(.name | contains("CI")) | .conclusion' \
+            "https://api.github.com/repos/${{ github.repository }}/commits/$COMMIT/check-runs" \
+            | jq -r '.check_runs[] | select(.name | contains("CI - Build and Test")) | .conclusion' \
             | head -1)
           
           if [[ "$CI_STATUS" != "success" ]]; then
@@ -75,15 +68,13 @@ jobs:
             exit 1
           fi
           
-          echo "CI tests passed for commit $VERSION"
-          echo "commit=$VERSION" >> $GITHUB_OUTPUT
+          echo "CI tests passed for commit $COMMIT"
 
   deploy:
     needs: [validate, check-ci-status]
     runs-on: ubuntu-latest
     environment: 
       name: production
-      url: https://your-production-domain.com  # Замените на ваш домен
     
     steps:
     - name: Notify about deployment start
@@ -135,13 +126,6 @@ jobs:
           # Расширенная проверка здоровья
           echo "Waiting for service to be healthy..."
           sleep 10
-          
-          # Проверка через curl если есть health endpoint
-          if curl -f http://localhost:8080/health 2>/dev/null; then
-            echo "Health check passed!"
-          else
-            echo "Health check not available or failed, checking container status..."
-          fi
           
           # Проверка статуса контейнеров
           if docker-compose ps | grep "Up"; then
