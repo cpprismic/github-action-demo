@@ -2,13 +2,13 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       build-status: ${{ job.status }}
     
@@ -48,8 +48,8 @@ jobs:
 
   test:
     needs: build
-    runs-on: ubuntu-latest
-    if: success()  # Запускаем только если сборка успешна
+    runs-on: self-hosted
+    if: success()
     
     steps:
     - name: Checkout repository
@@ -73,11 +73,12 @@ jobs:
     - name: Run tests
       run: |
         cd build
-        ctest --output-on-failure --verbose
+        chmod +x bin/unit_tests
+        ctest --output-on-failure
 
-  docker:
+  dockertest:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
