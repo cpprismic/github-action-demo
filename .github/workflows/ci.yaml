@@ -13,7 +13,7 @@ defaults:
 
 env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/system-monitor
-  CACHE_KEY: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('**/*.cpp', '**/*.h') }}
+  CACHE_KEY: cmake-${{ hashFiles('**/CMakeLists.txt') }}-${{ hashFiles('**/*.cpp', '**/*.h') }}
 
 jobs:
   # BUILD & CACHE
