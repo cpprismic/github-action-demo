@@ -42,7 +42,7 @@ COPY --from=builder /app/build/bin/system_monitor /usr/local/bin/
 USER monitor
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD ["/usr/local/bin/system_monitor"]
+    CMD /usr/local/bin/system_monitor
 
 ENTRYPOINT ["/usr/local/bin/system_monitor"]
 CMD []

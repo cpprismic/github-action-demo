@@ -16,7 +16,7 @@ services:
           cpus: '0.5'
           memory: 256M
     healthcheck:
-      test: ["/usr/local/bin/system_monitor"]
+      test: ["CMD", "/usr/local/bin/system_monitor"]
       interval: 30s
       timeout: 5s
       start_period: 5s
