@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
-#include <chrono>
 #include <atomic>
+#include <chrono>
 #include <cstdint>
+#include <string>
 
 /// @brief Снимок состояния системы в момент времени.
 struct SystemInfo {
@@ -58,10 +58,10 @@ public:
     void stop();
 
 private:
-    std::chrono::steady_clock::time_point last_cpu_read_;       ///< Момент последнего чтения /proc/stat
-    uint64_t                              last_idle_time_;      ///< Суммарное время простоя при последнем чтении
-    uint64_t                              last_total_time_;     ///< Суммарное процессорное время при последнем чтении
-    std::atomic<bool>                     running_;             ///< Флаг работы цикла мониторинга
+    std::chrono::steady_clock::time_point last_cpu_read_;   ///< Момент последнего чтения /proc/stat
+    uint64_t                              last_idle_time_;  ///< Суммарное время простоя при последнем чтении
+    uint64_t                              last_total_time_; ///< Суммарное процессорное время при последнем чтении
+    std::atomic<bool>                     running_;         ///< Флаг работы цикла мониторинга
 
     /// @brief Прочитать содержимое файла, учитывая возможный префикс /host.
     /// @param path Путь к файлу относительно корня (например, "/proc/uptime").

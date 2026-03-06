@@ -8,10 +8,11 @@
 
 ### CI/CD с GitHub Actions
 
-- **Многоэтапный пайплайн** — сборка, тестирование, сборка Docker-образа и сканирование безопасности как независимые jobs с явными зависимостями
+- **Многоэтапный пайплайн** — format-check, static-analysis, docs, build, test, docker как независимые jobs с явными зависимостями
 - **Кэширование артефактов сборки** — повторное использование результатов CMake между jobs через `actions/cache` и `actions/upload-artifact`
 - **Multi-arch Docker-образы** — сборка под `linux/amd64` и `linux/arm64` в одном job через Docker Buildx и QEMU без дублирования тегов
-- **Контроль качества** — Trivy сканирует файловую систему на уязвимости, результаты публикуются в GitHub Security
+- **Контроль качества** — clang-format, clang-tidy и Trivy на каждом push/PR; результаты публикуются как артефакты
+- **Генерация документации** — Doxygen запускается в отдельном CI job, HTML-документация публикуется как артефакт
 - **Production-деплой** — ручной запуск через `workflow_dispatch` с подтверждением, проверкой статуса CI, SSH-деплоем на VPS, health-check и записью в GitHub Deployments
 
 ### C++ и сборка
@@ -37,10 +38,11 @@
 │   └── main.cpp
 ├── tests/                      # Google Test юнит-тесты
 ├── .github/workflows/
-│   ├── ci.yaml                 # Build → Test → Docker → Security
+│   ├── ci.yaml                 # Format → Lint → Docs → Build → Test → Docker
 │   └── deploy-production.yaml  # Ручной деплой на VPS
 ├── dockerfile                  # Multi-stage сборка
-└── docker-compose.yml          # Запуск на сервере
+├── docker-compose.yml          # Запуск на сервере
+└── Doxyfile                    # Конфигурация генератора документации
 ```
 
 ## Что делает приложение
@@ -83,6 +85,16 @@ cd build
 ctest --output-on-failure
 # или напрямую:
 ./bin/unit_tests
+```
+
+### Документация
+
+```bash
+# Требуется: sudo apt install doxygen graphviz
+mkdir -p build && cd build
+cmake .. -DBUILD_DOCS=ON
+cmake --build . --target docs
+# Результат: docs/html/index.html
 ```
 
 ### Docker

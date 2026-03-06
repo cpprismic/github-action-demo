@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>System Monitor: Исходный файл /Users/cpprismic/Code/github/github-actions-demo/src/utils/utils.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">System Monitor
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Поиск',false);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>src</b></li><li class="navelem"><b>utils</b></li>  </ul>
+</div>
+</div><!-- top -->
+<div id="doc-content">
+<div class="header">
+  <div class="headertitle"><div class="title">utils.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceutils.html">utils</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>std::string <a class="code hl_function" href="namespaceutils.html#ab80863d8e9a4d6edcc0d5f59de39289e">formatUptime</a>(<span class="keywordtype">double</span> hours);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>std::string <a class="code hl_function" href="namespaceutils.html#a64a3a9778723b26afa3c95f2a5292b19">formatTimestamp</a>();</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keywordtype">bool</span> <a class="code hl_function" href="namespaceutils.html#adaa9ca931a2fd953d80d52250dd57d4e">parseUint64</a>(<span class="keyword">const</span> std::string&amp; str, uint64_t&amp; result);</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keywordtype">bool</span> <a class="code hl_function" href="namespaceutils.html#a6caa67f1aa086c062768e0e102daddc3">parseDouble</a>(<span class="keyword">const</span> std::string&amp; str, <span class="keywordtype">double</span>&amp; result);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>std::vector&lt;std::string&gt; <a class="code hl_function" href="namespaceutils.html#aeb0222533ae0db3447d090e01285ff84">split</a>(<span class="keyword">const</span> std::string&amp; str, <span class="keywordtype">char</span> delimiter);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>std::string <a class="code hl_function" href="namespaceutils.html#ad706342eabf30146d6c5bb75c31d4a39">trim</a>(<span class="keyword">const</span> std::string&amp; str);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keywordtype">bool</span> <a class="code hl_function" href="namespaceutils.html#afe100ce878b2b72693d26c66a35e7a49">parseArguments</a>(<span class="keywordtype">int</span> argc, <span class="keywordtype">char</span>* argv[], <span class="keywordtype">bool</span>&amp; continuous_mode, <span class="keywordtype">int</span>&amp; interval);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>} <span class="comment">// namespace utils</span></div>
+<div class="ttc" id="anamespaceutils_html"><div class="ttname"><a href="namespaceutils.html">utils</a></div><div class="ttdoc">Вспомогательные утилиты приложения.</div><div class="ttdef"><b>Определения</b> utils.cpp:11</div></div>
+<div class="ttc" id="anamespaceutils_html_a64a3a9778723b26afa3c95f2a5292b19"><div class="ttname"><a href="namespaceutils.html#a64a3a9778723b26afa3c95f2a5292b19">utils::formatTimestamp</a></div><div class="ttdeci">std::string formatTimestamp()</div><div class="ttdoc">Получить текущую дату и время в виде строки.</div><div class="ttdef"><b>Определения</b> utils.cpp:26</div></div>
+<div class="ttc" id="anamespaceutils_html_a6caa67f1aa086c062768e0e102daddc3"><div class="ttname"><a href="namespaceutils.html#a6caa67f1aa086c062768e0e102daddc3">utils::parseDouble</a></div><div class="ttdeci">bool parseDouble(const std::string &amp;str, double &amp;result)</div><div class="ttdoc">Разобрать число с плавающей точкой из строки.</div><div class="ttdef"><b>Определения</b> utils.cpp:72</div></div>
+<div class="ttc" id="anamespaceutils_html_ab80863d8e9a4d6edcc0d5f59de39289e"><div class="ttname"><a href="namespaceutils.html#ab80863d8e9a4d6edcc0d5f59de39289e">utils::formatUptime</a></div><div class="ttdeci">std::string formatUptime(double hours)</div><div class="ttdoc">Форматировать время работы системы в читаемый вид.</div><div class="ttdef"><b>Определения</b> utils.cpp:13</div></div>
+<div class="ttc" id="anamespaceutils_html_ad706342eabf30146d6c5bb75c31d4a39"><div class="ttname"><a href="namespaceutils.html#ad706342eabf30146d6c5bb75c31d4a39">utils::trim</a></div><div class="ttdeci">std::string trim(const std::string &amp;str)</div><div class="ttdoc">Удалить ведущие и завершающие пробельные символы.</div><div class="ttdef"><b>Определения</b> utils.cpp:91</div></div>
+<div class="ttc" id="anamespaceutils_html_adaa9ca931a2fd953d80d52250dd57d4e"><div class="ttname"><a href="namespaceutils.html#adaa9ca931a2fd953d80d52250dd57d4e">utils::parseUint64</a></div><div class="ttdeci">bool parseUint64(const std::string &amp;str, uint64_t &amp;result)</div><div class="ttdoc">Разобрать беззнаковое целое из строки.</div><div class="ttdef"><b>Определения</b> utils.cpp:35</div></div>
+<div class="ttc" id="anamespaceutils_html_aeb0222533ae0db3447d090e01285ff84"><div class="ttname"><a href="namespaceutils.html#aeb0222533ae0db3447d090e01285ff84">utils::split</a></div><div class="ttdeci">std::vector&lt; std::string &gt; split(const std::string &amp;str, char delimiter)</div><div class="ttdoc">Разбить строку по разделителю.</div><div class="ttdef"><b>Определения</b> utils.cpp:81</div></div>
+<div class="ttc" id="anamespaceutils_html_afe100ce878b2b72693d26c66a35e7a49"><div class="ttname"><a href="namespaceutils.html#afe100ce878b2b72693d26c66a35e7a49">utils::parseArguments</a></div><div class="ttdeci">bool parseArguments(int argc, char *argv[], bool &amp;continuous_mode, int &amp;interval)</div><div class="ttdoc">Разобрать аргументы командной строки.</div><div class="ttdef"><b>Определения</b> utils.cpp:101</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1
+</small></address>
+</div><!-- doc-content -->
+</body>
+</html>

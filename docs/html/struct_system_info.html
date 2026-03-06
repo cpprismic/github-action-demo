@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>System Monitor: Структура SystemInfo</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">System Monitor
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Поиск',false);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+</div><!-- top -->
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="#pub-attribs">Открытые атрибуты</a> &#124;
+<a href="struct_system_info-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle"><div class="title">Структура SystemInfo</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Снимок состояния системы в момент времени.  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="system__monitor_8h_source.html">system_monitor.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a411342e02dfa8f0b426e3f03999340e6" id="r_a411342e02dfa8f0b426e3f03999340e6"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a411342e02dfa8f0b426e3f03999340e6">toString</a> () const</td></tr>
+<tr class="memdesc:a411342e02dfa8f0b426e3f03999340e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Сформировать строковое представление всех полей.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Открытые атрибуты</h2></td></tr>
+<tr class="memitem:a36d8b1145b10b03619bde8ad211e61a3" id="r_a36d8b1145b10b03619bde8ad211e61a3"><td class="memItemLeft"><a id="a36d8b1145b10b03619bde8ad211e61a3" name="a36d8b1145b10b03619bde8ad211e61a3"></a>
+std::string&#160;</td><td class="memItemRight"><b>hostname</b></td></tr>
+<tr class="memdesc:a36d8b1145b10b03619bde8ad211e61a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Имя хоста <br /></td></tr>
+<tr class="memitem:afa7dbd4683e77bac56cddbef0bd9fa7b" id="r_afa7dbd4683e77bac56cddbef0bd9fa7b"><td class="memItemLeft"><a id="afa7dbd4683e77bac56cddbef0bd9fa7b" name="afa7dbd4683e77bac56cddbef0bd9fa7b"></a>
+double&#160;</td><td class="memItemRight"><b>uptime_hours</b></td></tr>
+<tr class="memdesc:afa7dbd4683e77bac56cddbef0bd9fa7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Время работы системы в часах <br /></td></tr>
+<tr class="memitem:af1ed00009dbad8e0ee641b235757825e" id="r_af1ed00009dbad8e0ee641b235757825e"><td class="memItemLeft"><a id="af1ed00009dbad8e0ee641b235757825e" name="af1ed00009dbad8e0ee641b235757825e"></a>
+double&#160;</td><td class="memItemRight"><b>cpu_usage_percent</b></td></tr>
+<tr class="memdesc:af1ed00009dbad8e0ee641b235757825e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Загрузка процессора, %. <br /></td></tr>
+<tr class="memitem:a63b1defdfbb2de2965dff489fbf76d09" id="r_a63b1defdfbb2de2965dff489fbf76d09"><td class="memItemLeft"><a id="a63b1defdfbb2de2965dff489fbf76d09" name="a63b1defdfbb2de2965dff489fbf76d09"></a>
+double&#160;</td><td class="memItemRight"><b>memory_usage_percent</b></td></tr>
+<tr class="memdesc:a63b1defdfbb2de2965dff489fbf76d09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Использование памяти, %. <br /></td></tr>
+<tr class="memitem:a01babf83bff3e115b6db5be438764538" id="r_a01babf83bff3e115b6db5be438764538"><td class="memItemLeft"><a id="a01babf83bff3e115b6db5be438764538" name="a01babf83bff3e115b6db5be438764538"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>total_memory_kb</b></td></tr>
+<tr class="memdesc:a01babf83bff3e115b6db5be438764538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Общий объём RAM, КБ <br /></td></tr>
+<tr class="memitem:aa31dd63683130fb5d6b61d36dfcda912" id="r_aa31dd63683130fb5d6b61d36dfcda912"><td class="memItemLeft"><a id="aa31dd63683130fb5d6b61d36dfcda912" name="aa31dd63683130fb5d6b61d36dfcda912"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>free_memory_kb</b></td></tr>
+<tr class="memdesc:aa31dd63683130fb5d6b61d36dfcda912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Свободная физическая память, КБ <br /></td></tr>
+<tr class="memitem:aff99d7e8239430a6b46e3c1ad5138dce" id="r_aff99d7e8239430a6b46e3c1ad5138dce"><td class="memItemLeft"><a id="aff99d7e8239430a6b46e3c1ad5138dce" name="aff99d7e8239430a6b46e3c1ad5138dce"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>available_memory_kb</b></td></tr>
+<tr class="memdesc:aff99d7e8239430a6b46e3c1ad5138dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Доступная память (включая кэш), КБ <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Снимок состояния системы в момент времени. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Методы</h2>
+<a id="a411342e02dfa8f0b426e3f03999340e6" name="a411342e02dfa8f0b426e3f03999340e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a411342e02dfa8f0b426e3f03999340e6">&#9670;&#160;</a></span>toString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string SystemInfo::toString </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Сформировать строковое представление всех полей. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>Отформатированная многострочная строка. </dd></dl>
+
+</div>
+</div>
+<hr/>Объявления и описания членов структур находятся в файлах:<ul>
+<li>/Users/cpprismic/Code/github/github-actions-demo/src/core/<a class="el" href="system__monitor_8h_source.html">system_monitor.h</a></li>
+<li>/Users/cpprismic/Code/github/github-actions-demo/src/core/<b>system_monitor.cpp</b></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1
+</small></address>
+</div><!-- doc-content -->
+</body>
+</html>

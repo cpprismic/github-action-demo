@@ -8,7 +8,7 @@ IndentWidth: 4
 UseTab: Never
 
 # Длина строки
-ColumnLimit: 100
+ColumnLimit: 120
 
 # Скобки
 BreakBeforeBraces: Attach
@@ -72,7 +72,7 @@ ReflowComments: true                 # Переформатировать ком
 SpacesInAngles: false                # Пробелы в <> для шаблонов
 
 # 6. Конструкторы и инициализация
-BreakConstructorInitializers: BeforeColon
+BreakConstructorInitializers: BeforeComma
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
 

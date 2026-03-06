@@ -1,23 +1,21 @@
+#include <unistd.h>
+
+#include <climits>
 #include <fstream>
-#include <sstream>
 #include <iomanip>
 #include <iostream>
-#include <climits>
-#include <unistd.h>
+#include <sstream>
 #include <thread>
 
 #ifndef HOST_NAME_MAX
-#define HOST_NAME_MAX 255  // POSIX минимум; Linux определяет это в <limits.h>
+#define HOST_NAME_MAX 255 // POSIX минимум; Linux определяет это в <limits.h>
 #endif
 
 #include "system_monitor.h"
 #include "utils.h"
 
 SystemMonitor::SystemMonitor()
-    : last_cpu_read_(std::chrono::steady_clock::now())
-    , last_idle_time_(0)
-    , last_total_time_(0)
-    , running_(true) {
+    : last_cpu_read_(std::chrono::steady_clock::now()), last_idle_time_(0), last_total_time_(0), running_(true) {
     // Первый вызов устанавливает базовые значения для последующего дифференциала
     calculateCpuUsage();
 }
@@ -75,9 +73,8 @@ uint64_t SystemMonitor::readProcStat(uint64_t& idle) {
     }
 
     std::istringstream iss(content);
-    std::string cpu;
-    uint64_t user = 0, nice = 0, system = 0, idle_time = 0,
-             iowait = 0, irq = 0, softirq = 0, steal = 0;
+    std::string        cpu;
+    uint64_t           user = 0, nice = 0, system = 0, idle_time = 0, iowait = 0, irq = 0, softirq = 0, steal = 0;
 
     iss >> cpu >> user >> nice >> system >> idle_time >> iowait >> irq >> softirq >> steal;
 
@@ -111,7 +108,7 @@ double SystemMonitor::calculateCpuUsage() {
     }
 
     const uint64_t total_diff = total - last_total_time_;
-    const uint64_t idle_diff  = idle  - last_idle_time_;
+    const uint64_t idle_diff  = idle - last_idle_time_;
 
     last_total_time_ = total;
     last_idle_time_  = idle;
@@ -133,14 +130,14 @@ void SystemMonitor::readMemoryInfo(uint64_t& total, uint64_t& free, uint64_t& av
     }
 
     std::istringstream iss(content);
-    std::string line;
+    std::string        line;
 
     while (std::getline(iss, line)) {
         // Разбиваем строку и отбрасываем пустые токены (множественные пробелы)
         const std::vector<std::string> parts = utils::split(line, ' ');
 
         std::string key;
-        uint64_t    value = 0;
+        uint64_t    value       = 0;
         bool        found_value = false;
 
         for (const auto& token : parts) {
@@ -162,24 +159,28 @@ void SystemMonitor::readMemoryInfo(uint64_t& total, uint64_t& free, uint64_t& av
             continue;
         }
 
-        if      (key == "MemTotal")     { total     = value; }
-        else if (key == "MemFree")      { free      = value; }
-        else if (key == "MemAvailable") { available = value; }
+        if (key == "MemTotal") {
+            total = value;
+        } else if (key == "MemFree") {
+            free = value;
+        } else if (key == "MemAvailable") {
+            available = value;
+        }
     }
 }
 
 SystemInfo SystemMonitor::getCurrentInfo() {
     SystemInfo info;
-    info.hostname         = readHostname();
-    info.uptime_hours     = readUptime();
+    info.hostname          = readHostname();
+    info.uptime_hours      = readUptime();
     info.cpu_usage_percent = calculateCpuUsage();
 
     readMemoryInfo(info.total_memory_kb, info.free_memory_kb, info.available_memory_kb);
 
     info.memory_usage_percent = (info.total_memory_kb > 0)
-        ? 100.0 * static_cast<double>(info.total_memory_kb - info.available_memory_kb)
-              / static_cast<double>(info.total_memory_kb)
-        : 0.0;
+                                    ? 100.0 * static_cast<double>(info.total_memory_kb - info.available_memory_kb) /
+                                          static_cast<double>(info.total_memory_kb)
+                                    : 0.0;
 
     return info;
 }
@@ -187,11 +188,11 @@ SystemInfo SystemMonitor::getCurrentInfo() {
 std::string SystemInfo::toString() const {
     std::ostringstream ss;
     ss << "=== System Information ===\n";
-    ss << "Timestamp:      " << utils::formatTimestamp()                                     << "\n";
-    ss << "Hostname:       " << hostname                                                      << "\n";
-    ss << "Uptime:         " << utils::formatUptime(uptime_hours)                            << "\n";
-    ss << "CPU Usage:      " << std::fixed << std::setprecision(1) << cpu_usage_percent      << "%\n";
-    ss << "Memory Usage:   " << std::fixed << std::setprecision(1) << memory_usage_percent   << "% "
+    ss << "Timestamp:      " << utils::formatTimestamp() << "\n";
+    ss << "Hostname:       " << hostname << "\n";
+    ss << "Uptime:         " << utils::formatUptime(uptime_hours) << "\n";
+    ss << "CPU Usage:      " << std::fixed << std::setprecision(1) << cpu_usage_percent << "%\n";
+    ss << "Memory Usage:   " << std::fixed << std::setprecision(1) << memory_usage_percent << "% "
        << "(" << (total_memory_kb - available_memory_kb) / 1024 << " MB"
        << " / " << total_memory_kb / 1024 << " MB)\n";
     ss << "==========================";

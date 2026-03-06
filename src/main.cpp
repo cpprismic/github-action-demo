@@ -1,8 +1,9 @@
-#include <csignal>
 #include <unistd.h>
 
 #include "system_monitor.h"
 #include "utils.h"
+
+#include <csignal>
 
 /// @brief Глобальный указатель на монитор для доступа из обработчика сигнала.
 static SystemMonitor* g_monitor = nullptr;
@@ -14,7 +15,8 @@ static SystemMonitor* g_monitor = nullptr;
 static void signalHandler(int signum) {
     // write() является async-signal-safe в отличие от std::cout
     const char msg[] = "\nReceived signal, shutting down...\n";
-    if (write(STDOUT_FILENO, msg, sizeof(msg) - 1) < 0) { /* async-signal-safe, ошибку игнорируем */ }
+    if (write(STDOUT_FILENO, msg, sizeof(msg) - 1) < 0) { /* async-signal-safe, ошибку игнорируем */
+    }
     (void)signum;
     if (g_monitor) {
         g_monitor->stop();
@@ -32,7 +34,7 @@ int main(int argc, char* argv[]) {
     SystemMonitor monitor;
     g_monitor = &monitor;
 
-    signal(SIGINT,  signalHandler);
+    signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
 
     if (continuous_mode) {

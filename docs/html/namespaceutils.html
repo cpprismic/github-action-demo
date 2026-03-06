@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>System Monitor: Пространство имен utils</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">System Monitor
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Поиск',false);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+</div><!-- top -->
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle"><div class="title">Пространство имен utils</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Вспомогательные утилиты приложения.  
+<a href="#details">Подробнее...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:ab80863d8e9a4d6edcc0d5f59de39289e" id="r_ab80863d8e9a4d6edcc0d5f59de39289e"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ab80863d8e9a4d6edcc0d5f59de39289e">formatUptime</a> (double hours)</td></tr>
+<tr class="memdesc:ab80863d8e9a4d6edcc0d5f59de39289e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Форматировать время работы системы в читаемый вид.  <br /></td></tr>
+<tr class="memitem:a64a3a9778723b26afa3c95f2a5292b19" id="r_a64a3a9778723b26afa3c95f2a5292b19"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a64a3a9778723b26afa3c95f2a5292b19">formatTimestamp</a> ()</td></tr>
+<tr class="memdesc:a64a3a9778723b26afa3c95f2a5292b19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Получить текущую дату и время в виде строки.  <br /></td></tr>
+<tr class="memitem:adaa9ca931a2fd953d80d52250dd57d4e" id="r_adaa9ca931a2fd953d80d52250dd57d4e"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#adaa9ca931a2fd953d80d52250dd57d4e">parseUint64</a> (const std::string &amp;str, uint64_t &amp;result)</td></tr>
+<tr class="memdesc:adaa9ca931a2fd953d80d52250dd57d4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Разобрать беззнаковое целое из строки.  <br /></td></tr>
+<tr class="memitem:a6caa67f1aa086c062768e0e102daddc3" id="r_a6caa67f1aa086c062768e0e102daddc3"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a6caa67f1aa086c062768e0e102daddc3">parseDouble</a> (const std::string &amp;str, double &amp;result)</td></tr>
+<tr class="memdesc:a6caa67f1aa086c062768e0e102daddc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Разобрать число с плавающей точкой из строки.  <br /></td></tr>
+<tr class="memitem:aeb0222533ae0db3447d090e01285ff84" id="r_aeb0222533ae0db3447d090e01285ff84"><td class="memItemLeft">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aeb0222533ae0db3447d090e01285ff84">split</a> (const std::string &amp;str, char delimiter)</td></tr>
+<tr class="memdesc:aeb0222533ae0db3447d090e01285ff84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Разбить строку по разделителю.  <br /></td></tr>
+<tr class="memitem:ad706342eabf30146d6c5bb75c31d4a39" id="r_ad706342eabf30146d6c5bb75c31d4a39"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#ad706342eabf30146d6c5bb75c31d4a39">trim</a> (const std::string &amp;str)</td></tr>
+<tr class="memdesc:ad706342eabf30146d6c5bb75c31d4a39"><td class="mdescLeft">&#160;</td><td class="mdescRight">Удалить ведущие и завершающие пробельные символы.  <br /></td></tr>
+<tr class="memitem:afe100ce878b2b72693d26c66a35e7a49" id="r_afe100ce878b2b72693d26c66a35e7a49"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#afe100ce878b2b72693d26c66a35e7a49">parseArguments</a> (int argc, char *argv[], bool &amp;continuous_mode, int &amp;interval)</td></tr>
+<tr class="memdesc:afe100ce878b2b72693d26c66a35e7a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Разобрать аргументы командной строки.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Вспомогательные утилиты приложения. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Функции</h2>
+<a id="a64a3a9778723b26afa3c95f2a5292b19" name="a64a3a9778723b26afa3c95f2a5292b19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64a3a9778723b26afa3c95f2a5292b19">&#9670;&#160;</a></span>formatTimestamp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string utils::formatTimestamp </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Получить текущую дату и время в виде строки. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>Строка формата "YYYY-MM-DD HH:MM:SS" по местному времени. </dd></dl>
+
+</div>
+</div>
+<a id="ab80863d8e9a4d6edcc0d5f59de39289e" name="ab80863d8e9a4d6edcc0d5f59de39289e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab80863d8e9a4d6edcc0d5f59de39289e">&#9670;&#160;</a></span>formatUptime()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string utils::formatUptime </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>hours</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Форматировать время работы системы в читаемый вид. </p>
+<p>Пример: 25.5 часа → "1d 1h 30m" </p><dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hours</td><td>Время работы в часах (&gt;= 0). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Строка вида "Xd Yh Zm" (секция дней опускается при 0). </dd></dl>
+
+</div>
+</div>
+<a id="afe100ce878b2b72693d26c66a35e7a49" name="afe100ce878b2b72693d26c66a35e7a49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe100ce878b2b72693d26c66a35e7a49">&#9670;&#160;</a></span>parseArguments()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool utils::parseArguments </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &amp;</td>          <td class="paramname"><span class="paramname"><em>continuous_mode</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;</td>          <td class="paramname"><span class="paramname"><em>interval</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Разобрать аргументы командной строки. </p>
+<p>Поддерживаемые опции:</p><ul>
+<li>(без аргументов) — однократный запуск;</li>
+<li><span class="tt">-c</span> / <span class="tt">--continuous [N]</span> — непрерывный режим с интервалом N секунд;</li>
+<li><span class="tt">-h</span> / <span class="tt">--help</span> — вывод справки.</li>
+</ul>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">argc</td><td>Количество аргументов. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">argv</td><td>Массив аргументов. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">continuous_mode</td><td>true, если запрошен непрерывный режим. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">interval</td><td>Интервал в секундах (по умолчанию 2). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true при успешном разборе, false при ошибке (сообщение выведено в stderr). </dd></dl>
+
+</div>
+</div>
+<a id="a6caa67f1aa086c062768e0e102daddc3" name="a6caa67f1aa086c062768e0e102daddc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6caa67f1aa086c062768e0e102daddc3">&#9670;&#160;</a></span>parseDouble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool utils::parseDouble </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Разобрать число с плавающей точкой из строки. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">str</td><td>Входная строка. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">result</td><td>Результат разбора при успехе. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true при успешном разборе, false иначе. </dd></dl>
+
+</div>
+</div>
+<a id="adaa9ca931a2fd953d80d52250dd57d4e" name="adaa9ca931a2fd953d80d52250dd57d4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaa9ca931a2fd953d80d52250dd57d4e">&#9670;&#160;</a></span>parseUint64()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool utils::parseUint64 </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t &amp;</td>          <td class="paramname"><span class="paramname"><em>result</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Разобрать беззнаковое целое из строки. </p>
+<p>Возвращает false при наличии нецифровых символов (кроме ведущих/завершающих пробелов), при отрицательных значениях и при переполнении. </p><dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">str</td><td>Входная строка. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">result</td><td>Результат разбора при успехе. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>true при успешном разборе, false иначе. </dd></dl>
+
+</div>
+</div>
+<a id="aeb0222533ae0db3447d090e01285ff84" name="aeb0222533ae0db3447d090e01285ff84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb0222533ae0db3447d090e01285ff84">&#9670;&#160;</a></span>split()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::string &gt; utils::split </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char</td>          <td class="paramname"><span class="paramname"><em>delimiter</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Разбить строку по разделителю. </p>
+<p>Пустые токены сохраняются (при множественных разделителях подряд). </p><dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>Входная строка. </td></tr>
+    <tr><td class="paramname">delimiter</td><td>Символ-разделитель. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Вектор подстрок (может содержать пустые элементы). </dd></dl>
+
+</div>
+</div>
+<a id="ad706342eabf30146d6c5bb75c31d4a39" name="ad706342eabf30146d6c5bb75c31d4a39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad706342eabf30146d6c5bb75c31d4a39">&#9670;&#160;</a></span>trim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string utils::trim </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Удалить ведущие и завершающие пробельные символы. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">str</td><td>Входная строка. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>Строка без пробелов по краям. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1
+</small></address>
+</div><!-- doc-content -->
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.16.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>System Monitor: Класс SystemMonitor</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript" src="darkmode_toggle.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">System Monitor
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.16.1 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Поиск',false);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+</div><!-- top -->
+<div id="doc-content">
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="class_system_monitor-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle"><div class="title">Класс SystemMonitor</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Монитор системных ресурсов Linux.  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="system__monitor_8h_source.html">system_monitor.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a0999285f287a67cba83cb92e8bffce6e" id="r_a0999285f287a67cba83cb92e8bffce6e"><td class="memItemLeft"><a id="a0999285f287a67cba83cb92e8bffce6e" name="a0999285f287a67cba83cb92e8bffce6e"></a>
+&#160;</td><td class="memItemRight"><b>SystemMonitor</b> ()</td></tr>
+<tr class="memdesc:a0999285f287a67cba83cb92e8bffce6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Конструктор. Выполняет первичное чтение /proc/stat для последующего дифференциала. <br /></td></tr>
+<tr class="memitem:a879d8089c4409bc4f8f59a10782c8328" id="r_a879d8089c4409bc4f8f59a10782c8328"><td class="memItemLeft"><a id="a879d8089c4409bc4f8f59a10782c8328" name="a879d8089c4409bc4f8f59a10782c8328"></a>
+&#160;</td><td class="memItemRight"><b>~SystemMonitor</b> ()</td></tr>
+<tr class="memdesc:a879d8089c4409bc4f8f59a10782c8328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Деструктор. Останавливает мониторинг, если он запущен. <br /></td></tr>
+<tr class="memitem:a1d74f777ebb8f86119c1ebb1e390765c" id="r_a1d74f777ebb8f86119c1ebb1e390765c"><td class="memItemLeft"><a id="a1d74f777ebb8f86119c1ebb1e390765c" name="a1d74f777ebb8f86119c1ebb1e390765c"></a>
+&#160;</td><td class="memItemRight"><b>SystemMonitor</b> (const <a class="el" href="class_system_monitor.html">SystemMonitor</a> &amp;)=delete</td></tr>
+<tr class="memitem:a43ab018ca12da83092537309d201bab4" id="r_a43ab018ca12da83092537309d201bab4"><td class="memItemLeft"><a id="a43ab018ca12da83092537309d201bab4" name="a43ab018ca12da83092537309d201bab4"></a>
+<a class="el" href="class_system_monitor.html">SystemMonitor</a> &amp;&#160;</td><td class="memItemRight"><b>operator=</b> (const <a class="el" href="class_system_monitor.html">SystemMonitor</a> &amp;)=delete</td></tr>
+<tr class="memitem:a2e582d1947eaace99745b742e6d4d9cb" id="r_a2e582d1947eaace99745b742e6d4d9cb"><td class="memItemLeft"><a class="el" href="struct_system_info.html">SystemInfo</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2e582d1947eaace99745b742e6d4d9cb">getCurrentInfo</a> ()</td></tr>
+<tr class="memdesc:a2e582d1947eaace99745b742e6d4d9cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Получить текущий снимок состояния системы.  <br /></td></tr>
+<tr class="memitem:a14d9241714841048104f0095870c9060" id="r_a14d9241714841048104f0095870c9060"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a14d9241714841048104f0095870c9060">printInfo</a> (const <a class="el" href="struct_system_info.html">SystemInfo</a> &amp;info)</td></tr>
+<tr class="memdesc:a14d9241714841048104f0095870c9060"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вывести информацию о системе в стандартный поток вывода.  <br /></td></tr>
+<tr class="memitem:a313d5635804e062cd164a3b00b1e74b9" id="r_a313d5635804e062cd164a3b00b1e74b9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a313d5635804e062cd164a3b00b1e74b9">runContinuousMonitoring</a> (int interval_seconds)</td></tr>
+<tr class="memdesc:a313d5635804e062cd164a3b00b1e74b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Запустить непрерывный мониторинг с заданным интервалом.  <br /></td></tr>
+<tr class="memitem:a62ea658d2cb16374f0ade198aea2eeb1" id="r_a62ea658d2cb16374f0ade198aea2eeb1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a62ea658d2cb16374f0ade198aea2eeb1">stop</a> ()</td></tr>
+<tr class="memdesc:a62ea658d2cb16374f0ade198aea2eeb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Остановить непрерывный мониторинг.  <br /></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Монитор системных ресурсов Linux. </p>
+<p>Читает данные из файловой системы /proc и предоставляет информацию о загрузке процессора, использовании памяти и времени работы системы. Поддерживает запуск внутри Docker-контейнера с примонтированным /host/proc.</p>
+<p>Копирование запрещено — объект владеет внутренним состоянием CPU-дифференциала. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Методы</h2>
+<a id="a2e582d1947eaace99745b742e6d4d9cb" name="a2e582d1947eaace99745b742e6d4d9cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e582d1947eaace99745b742e6d4d9cb">&#9670;&#160;</a></span>getCurrentInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_system_info.html">SystemInfo</a> SystemMonitor::getCurrentInfo </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Получить текущий снимок состояния системы. </p>
+<dl class="section return"><dt>Возвращает</dt><dd>Заполненная структура <a class="el" href="struct_system_info.html" title="Снимок состояния системы в момент времени.">SystemInfo</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a14d9241714841048104f0095870c9060" name="a14d9241714841048104f0095870c9060"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14d9241714841048104f0095870c9060">&#9670;&#160;</a></span>printInfo()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SystemMonitor::printInfo </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_system_info.html">SystemInfo</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>info</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Вывести информацию о системе в стандартный поток вывода. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>Снимок состояния системы для отображения. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a313d5635804e062cd164a3b00b1e74b9" name="a313d5635804e062cd164a3b00b1e74b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a313d5635804e062cd164a3b00b1e74b9">&#9670;&#160;</a></span>runContinuousMonitoring()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SystemMonitor::runContinuousMonitoring </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>interval_seconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Запустить непрерывный мониторинг с заданным интервалом. </p>
+<p>Блокирует вызывающий поток до вызова <a class="el" href="#a62ea658d2cb16374f0ade198aea2eeb1" title="Остановить непрерывный мониторинг.">stop()</a> или получения сигнала. </p><dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">interval_seconds</td><td>Интервал между измерениями в секундах (&gt; 0). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a62ea658d2cb16374f0ade198aea2eeb1" name="a62ea658d2cb16374f0ade198aea2eeb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62ea658d2cb16374f0ade198aea2eeb1">&#9670;&#160;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SystemMonitor::stop </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Остановить непрерывный мониторинг. </p>
+<p>Метод безопасен для вызова из обработчика сигнала. </p>
+
+</div>
+</div>
+<hr/>Объявления и описания членов классов находятся в файлах:<ul>
+<li>/Users/cpprismic/Code/github/github-actions-demo/src/core/<a class="el" href="system__monitor_8h_source.html">system_monitor.h</a></li>
+<li>/Users/cpprismic/Code/github/github-actions-demo/src/core/<b>system_monitor.cpp</b></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Создано системой&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.16.1
+</small></address>
+</div><!-- doc-content -->
+</body>
+</html>

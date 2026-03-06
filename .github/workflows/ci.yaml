@@ -59,6 +59,31 @@ jobs:
         path: tidy-output.txt
         retention-days: 7
 
+  # DOCS
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Doxygen
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y --no-install-recommends doxygen graphviz
+
+    - name: Generate documentation
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DBUILD_DOCS=ON
+        cmake --build . --target docs
+
+    - name: Upload documentation
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: docs/html/
+        retention-days: 30
+
   # BUILD & CACHE
   build:
     runs-on: ubuntu-latest

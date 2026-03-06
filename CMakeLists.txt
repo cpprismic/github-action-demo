@@ -44,3 +44,34 @@ endif()
 if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
+
+# Ищем Doxygen (опционально, не требует установки)
+find_package(Doxygen QUIET)
+
+# Опция для сборки документации (по умолчанию OFF)
+option(BUILD_DOCS "Build Doxygen documentation" OFF)
+
+if(BUILD_DOCS AND DOXYGEN_FOUND)
+    # Создаём копию Doxyfile в папке сборки (чтобы не менять оригинал)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile
+        ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        @ONLY
+    )
+    
+    # Добавляем цель для генерации документации
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating documentation with Doxygen"
+        VERBATIM
+    )
+    
+    # Добавляем короткий псевдоним
+    add_custom_target(doc DEPENDS docs)
+    
+    message(STATUS "Doxygen found: targets 'docs' and 'doc' added")
+    
+elseif(BUILD_DOCS AND NOT DOXYGEN_FOUND)
+    message(WARNING "BUILD_DOCS is ON but Doxygen not found. Install with: sudo apt install doxygen graphviz")
+endif()
