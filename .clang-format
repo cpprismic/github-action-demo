@@ -1,0 +1,102 @@
+---
+BasedOnStyle: LLVM
+
+# Размер отступа
+IndentWidth: 4
+
+# Использовать пробелы или табы
+UseTab: Never
+
+# Длина строки
+ColumnLimit: 100
+
+# Скобки
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+
+# Пробелы
+SpaceAfterCStyleCast: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+
+# Указатели и ссылки
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Include сортировка
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^<.*\.h>'
+    Priority: 1
+  - Regex: '^".*\.h"'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 3
+
+# Максимальное количество пустых строк
+MaxEmptyLinesToKeep: 2
+
+# Комментарии
+AlignTrailingComments: true
+
+# ========== КЛЮЧЕВЫЕ НАСТРОЙКИ ==========
+
+# 1. Выравнивание объявлений переменных
+AlignConsecutiveDeclarations: true
+# Форматирует:
+# std::chrono::steady_clock::time_point last_cpu_read_;  ///< Момент
+# uint64_t                              last_idle_time_; ///< Суммарное
+# uint64_t                              last_total_time_; ///< Суммарное
+
+# 2. Выравнивание по колонкам
+AlignAfterOpenBracket: Align         # Выравнивание после открывающей скобки
+AlignConsecutiveAssignments: true    # Выравнивание присваиваний (a = 1; ab = 2;)
+AlignConsecutiveBitFields: true      # Выравнивание битовых полей
+AlignConsecutiveMacros: true         # Выравнивание макросов
+AlignOperands: Align                 # Выравнивание операндов в выражениях
+AlignEscapedNewlines: Left           # Выравнивание обратных слешей в многострочных макросах
+
+# 3. Отступы для доступа (public/private)
+AccessModifierOffset: -4             # Отступ для модификаторов доступа
+
+# 4. Длинные имена типов - не переносить, если можно выровнять
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: Yes
+
+# 5. Комментарии
+CommentPragmas: '^ IWYU pragma:'
+ReflowComments: true                 # Переформатировать комментарии
+SpacesInAngles: false                # Пробелы в <> для шаблонов
+
+# 6. Конструкторы и инициализация
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+
+# 7. Пустые строки
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# 8. Пробелы
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: true
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeRangeBasedForLoopColon: true
+
+# 9. Шаблоны
+Standard: c++17                      # или c++20, в зависимости от проекта
+
+# 10. Перенос строк
+PenaltyBreakAssignment: 100
+PenaltyBreakBeforeFirstCallParameter: 100
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyBreakTemplateDeclaration: 10
+PenaltyExcessCharacter: 100
+PenaltyReturnTypeOnItsOwnLine: 60

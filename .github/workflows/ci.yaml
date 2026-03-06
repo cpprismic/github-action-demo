@@ -15,6 +15,50 @@ env:
   DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/system-monitor
 
 jobs:
+  # FORMAT CHECK
+  format-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check formatting
+      uses: jidicula/clang-format-action@v4.0.0
+      with:
+        clang-format-version: '15'
+        check-path: 'src tests'  # проверить обе папки
+        fallback-style: 'LLVM'    # запасной стиль, если нет .clang-format
+        exclude-regex: 'build/|.git/|_deps/'  # исключить лишние папки
+
+  # STATIC ANALUSIS
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install clang-tidy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy-15
+    
+    - name: Generate compile_commands.json
+      run: |
+        mkdir -p build
+        cd build
+        cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+    
+    - name: Run clang-tidy
+      run: |
+        cd build
+        run-clang-tidy-15 -p . 2>&1 | tee ../tidy-output.txt
+    
+    - name: Upload analysis report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: static-analysis-report
+        path: tidy-output.txt
+        retention-days: 7
+
   # BUILD & CACHE
   build:
     runs-on: ubuntu-latest
@@ -134,29 +178,3 @@ jobs:
       run: |
         docker run --rm --platform linux/amd64 \
           ${{ env.DOCKER_IMAGE }}:${{ github.sha }} --help
-
-  # SECURITY SCAN
-  # security:
-  #   needs: [build, test]
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-  #   permissions:
-  #     contents: read
-  #     security-events: write
-
-  #   steps:
-  #   - name: Checkout
-  #     uses: actions/checkout@v4
-
-  #   - name: Run Trivy vulnerability scanner
-  #     uses: aquasecurity/trivy-action@0.30.0
-  #     with:
-  #       scan-type: 'fs'
-  #       format: 'sarif'
-  #       output: 'trivy-results.sarif'
-
-  #   - name: Upload Trivy scan results
-  #     uses: github/codeql-action/upload-sarif@v4
-  #     if: always()
-  #     with:
-  #       sarif_file: 'trivy-results.sarif'
